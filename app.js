@@ -28,7 +28,6 @@ app.use(sessions({
     resave: false
 }));
 app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //username and password
@@ -39,12 +38,10 @@ const credential =
 }
 
 app.get('', (req, res) => {
-    // session=req.session;
     const us = credential.myusername;
     if (req.session.user) {
         res.render('pages/home', {us});
     } else
-        // res.sendFile('views/index.html',{root:__dirname})
         res.render('pages/login')
 })
 
@@ -52,16 +49,13 @@ app.post('/login', (req, res) => {
     if (req.body.username === credential.myusername && req.body.password === credential.mypassword) {
         req.session.user = req.body.username;
         const us = credential.myusername;
-        // session=req.session;
-        // req.session.loggedIn=true
-        // console.log(req.body.username)
-        // res.send(`Hey there, welcome <a href=\'/logout'>click to logout</a>`);
+        session=req.session;
+        req.session.loggedIn=true
         res.render('pages/home', { us })
     }
     else {
         res.render('pages/login', { errMsg: "Invalid Username" });
     }
-    // res.render('pages/home')
 })
 
 app.get('/logout', (req, res) => {
@@ -73,7 +67,6 @@ app.get('/logout', (req, res) => {
             res.render('pages/login')
         }
     });
-    // res.redirect('/');
 });
 
 app.listen(port, () => {
